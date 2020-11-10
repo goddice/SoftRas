@@ -24,5 +24,6 @@ def directional_lighting(light, normals, light_intensity=0.5, light_color=(1,1,1
         light_direction = light_direction[None, :] #[nb, 3]
 
     cosine = F.relu(torch.sum(normals * light_direction, dim=2)) #[]
-    light += light_intensity * (light_color[:, None, :] * cosine[:, :, None])
+    light += light_intensity * (light_color[:, None, :] * cosine[:, :, None]) # diffuse
+    light += 0.3 * light_intensity * (light_color[:, None, :] * cosine[:, :, None]**9.0) # specular
     return light #[nb, :, 3]
